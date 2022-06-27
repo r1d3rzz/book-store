@@ -1,0 +1,30 @@
+Books Table
+
+1.name
+2.description
+3.author_id (foreign)
+4.price
+5.category_id (foreign)
+6.slug
+7.thumbnail
+
+----------------------------------------------
+
+Users Table
+
+1.name
+2.username
+3.email
+4.gender
+5.password
+6.phonenumber
+7.avator
+
+----------------------------------------------
+
+Category
+
+1.name
+2.slug
+
+----------------------------------------------
