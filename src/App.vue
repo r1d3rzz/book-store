@@ -1,6 +1,20 @@
 <template>
+  <div class="container-fluid sticky-top">
+    <div class="row">
+      <NavBar />
+    </div>
+  </div>
   <router-view />
 </template>
+
+<script>
+import NavBar from "./components/NavBar.vue";
+export default {
+  components: {
+    NavBar,
+  },
+};
+</script>
 
 <style>
 #app {
@@ -17,10 +31,11 @@ nav {
 
 nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #0000005b;
+  text-decoration: none;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #000000;
 }
 </style>
