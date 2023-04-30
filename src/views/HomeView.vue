@@ -1,18 +1,20 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="row">
+    <div v-if="books.length">
+      <BookLists :books="books" />
+    </div>
   </div>
 </template>
-
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import BookLists from "../components/BookLists";
+import getBooks from "../composables/getBooks";
 export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
-}
+  components: { BookLists },
+  setup() {
+    let { books, error, load } = getBooks();
+    load();
+    return { books, error };
+  },
+};
 </script>
+<style lang=""></style>
