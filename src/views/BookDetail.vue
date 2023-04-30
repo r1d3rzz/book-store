@@ -18,7 +18,11 @@
                 :key="tag"
                 class="badge bg-danger me-1 mb-1"
               >
-                {{ tag }}
+                <router-link
+                  :to="{ name: 'tagsView', params: { tag } }"
+                  class="text-reset text-decoration-none"
+                  >{{ tag }}</router-link
+                >
               </span>
             </div>
             <p class="mb-2 badge bg-primary">Price - {{ book.price }} MMK</p>
