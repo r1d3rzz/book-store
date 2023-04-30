@@ -21,7 +21,7 @@
                 {{ tag }}
               </span>
             </div>
-            <p class="mb-2 badge bg-primary">Price - {{ book.price }}</p>
+            <p class="mb-2 badge bg-primary">Price - {{ book.price }} MMK</p>
             <p>{{ book.detail }}</p>
           </div>
           <div class="card-footer">

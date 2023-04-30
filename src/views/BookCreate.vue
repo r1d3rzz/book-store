@@ -7,15 +7,25 @@
             <div class="fs-4">Create New Book</div>
           </div>
           <div class="card-body">
-            <form>
+            <form @submit.prevent="upload">
               <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" required />
+                <input
+                  type="text"
+                  class="form-control"
+                  id="title"
+                  v-model="title"
+                />
               </div>
 
               <div class="mb-3">
                 <label for="author" class="form-label">Author</label>
-                <input type="text" class="form-control" id="author" required />
+                <input
+                  type="text"
+                  class="form-control"
+                  id="author"
+                  v-model="author"
+                />
               </div>
 
               <div class="mb-3">
@@ -23,19 +33,36 @@
                   Tag
                   <small class="text-muted">(Press "Enter" add a Tag)</small>
                 </label>
-                <input type="text" class="form-control" id="tag" />
-                <div class="tagsContainer mt-1">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="tag"
+                  v-model="tag"
+                  @keydown.enter.prevent="addTags"
+                />
+                <div class="tagsContainer mt-1" v-if="tags.length">
                   <div class="text-danger">
                     <small>Double Click to Remove Tag</small>
                   </div>
-                  <span class="badge bg-primary me-1 tagItem">html</span>
-                  <span class="badge bg-primary me-1 tagItem">css</span>
+                  <span
+                    class="badge bg-primary me-1 tagItem"
+                    v-for="tag in tags"
+                    :key="tag"
+                    @dblclick="removeTag(tag)"
+                  >
+                    {{ tag }}
+                  </span>
                 </div>
               </div>
 
               <div class="mb-3">
                 <label for="price" class="form-label">Price</label>
-                <input type="text" class="form-control" id="price" required />
+                <input
+                  type="text"
+                  class="form-control"
+                  id="price"
+                  v-model="price"
+                />
               </div>
 
               <div class="mb-3">
@@ -45,13 +72,33 @@
                   class="form-control"
                   id="detail"
                   rows="5"
-                  required
+                  v-model="detail"
                 ></textarea>
               </div>
 
               <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  v-if="!isUploading"
+                >
                   Upload Book
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  disabled
+                  v-if="isUploading"
+                >
+                  <div class="d-flex justify-content-end align-items-center">
+                    <div
+                      class="spinner-border me-2 spinner-border-sm"
+                      role="status"
+                    >
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div>Uploading...</div>
+                  </div>
                 </button>
               </div>
             </form>
@@ -62,7 +109,70 @@
   </div>
 </template>
 <script>
-export default {};
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+export default {
+  setup() {
+    let router = useRouter();
+    let isUploading = ref(false);
+
+    let title = ref("");
+    let author = ref("");
+    let detail = ref("");
+    let price = ref("");
+    let tag = ref("");
+    let tags = ref([]);
+
+    let addTags = (e) => {
+      if (!tags.value.includes(tag.value)) {
+        if (e.key === "Enter" && tag.value != "") {
+          tags.value.push(tag.value);
+          tag.value = "";
+        }
+      } else {
+        tag.value = "";
+      }
+    };
+
+    let removeTag = (t) => {
+      tags.value = tags.value.filter((tag) => {
+        return tag != t;
+      });
+    };
+
+    let upload = async () => {
+      isUploading.value = true;
+      await fetch("http://localhost:3000/books", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title.value,
+          author: author.value,
+          detail: detail.value,
+          price: price.value,
+          tags: tags.value,
+        }),
+      }).then((_) => {
+        isUploading.value = false;
+        router.push({ name: "home" });
+      });
+    };
+
+    return {
+      title,
+      author,
+      detail,
+      price,
+      tag,
+      tags,
+      isUploading,
+      addTags,
+      removeTag,
+      upload,
+    };
+  },
+};
 </script>
 <style>
 .tagItem {
