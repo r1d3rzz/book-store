@@ -1,16 +1,27 @@
 <template>
-  <div v-if="books.length">
-    <BookLists :books="filterBooks" />
+  <div class="container" v-if="books.length">
+    <div class="row">
+      <div class="col-md-8">
+        <BookLists :books="filterBooks" />
+      </div>
+      <div class="col-md-4">
+        <TagsCloud :books="books" />
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import { computed } from "vue";
+import TagsCloud from "../components/TagsCloud";
 import BookLists from "../components/BookLists";
 import getBooks from "@/composables/getBooks";
-
+import { computed } from "vue";
 export default {
-  components: { BookLists },
   props: ["tag"],
+  components: {
+    TagsCloud,
+    BookLists,
+  },
+
   setup(props) {
     let { books, error, load } = getBooks();
     load();

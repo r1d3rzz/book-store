@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import BookDetail from "../views/BookDetail.vue";
 import BookCreate from "../views/BookCreate.vue";
-import TagsView from "../views/TagsView.vue";
+import TagView from "../views/TagView.vue";
 
 const routes = [
   {
@@ -17,15 +17,15 @@ const routes = [
     props: true,
   },
   {
-    path: "/books/create",
-    name: "bookCreate",
-    component: BookCreate,
+    path: "/books/tags/:tag",
+    name: "tagView",
+    component: TagView,
     props: true,
   },
   {
-    path: "/books/tags/:tag",
-    name: "tagsView",
-    component: TagsView,
+    path: "/books/create",
+    name: "bookCreate",
+    component: BookCreate,
     props: true,
   },
   {

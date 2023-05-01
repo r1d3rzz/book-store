@@ -109,6 +109,7 @@
   </div>
 </template>
 <script>
+import { db } from "../../firebase/config";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -142,21 +143,23 @@ export default {
     };
 
     let upload = async () => {
+      let newBookData = {
+        title: title.value,
+        author: author.value,
+        detail: detail.value,
+        price: price.value,
+        tags: tags.value,
+      };
+
       isUploading.value = true;
-      await fetch("http://localhost:3000/books", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: title.value,
-          author: author.value,
-          detail: detail.value,
-          price: price.value,
-          tags: tags.value,
-        }),
-      }).then((_) => {
-        isUploading.value = false;
-        router.push({ name: "home" });
-      });
+
+      await db
+        .collection("books")
+        .add(newBookData)
+        .then((_) => {
+          isUploading.value = false;
+          router.push({ name: "home" });
+        });
     };
 
     return {

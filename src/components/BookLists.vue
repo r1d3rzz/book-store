@@ -1,6 +1,6 @@
 <template>
   <div v-for="book in books" :key="book.id">
-    <div class="card mb-3 col-md-9 mx-auto text-start">
+    <div class="card mb-3 mx-auto text-start">
       <SingleBook :book="book" />
     </div>
   </div>

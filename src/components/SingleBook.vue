@@ -12,8 +12,8 @@
         class="badge bg-danger me-1 mb-1"
       >
         <router-link
-          :to="{ name: 'tagsView', params: { tag } }"
-          class="text-reset text-decoration-none"
+          :to="{ name: 'tagView', params: { tag } }"
+          class="text-white text-decoration-none"
           >{{ tag }}</router-link
         >
       </span>
