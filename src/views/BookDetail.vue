@@ -42,9 +42,14 @@
               <h3>{{ book.title }}</h3>
             </div>
             <div>
-              <button class="btn btn-sm btn-danger" @click="isShow = true">
+              <button class="btn btn-sm btn-danger me-1" @click="isShow = true">
                 delete
               </button>
+              <router-link :to="{ name: 'editView', params: { id: book.id } }">
+                <button class="btn btn-sm btn-warning" @click="isShow = true">
+                  edit
+                </button>
+              </router-link>
             </div>
           </div>
           <div class="card-body">
@@ -99,7 +104,7 @@ export default {
     let isDelete = ref(false);
     let { book, error, load } = getBook(props.id);
     load();
-    let goBack = () => router.go(-1);
+    let goBack = () => router.push({ name: "home" });
 
     let closeModel = () => {
       if (isDelete.value == false) {

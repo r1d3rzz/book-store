@@ -1,13 +1,18 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="book">
     <div class="row">
       <div class="col-md mx-auto">
         <div class="card text-start">
-          <div class="card-header">
-            <div class="fs-4">Create New Book</div>
+          <div
+            class="card-header d-flex justify-content-between align-items-center"
+          >
+            <div class="fs-4">Edit Book</div>
+            <div>
+              <button class="btn btn-sm btn-dark" @click="goBack">Back</button>
+            </div>
           </div>
           <div class="card-body">
-            <form @submit.prevent="upload">
+            <form @submit.prevent="update">
               <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input
@@ -79,14 +84,14 @@
               <div class="d-flex justify-content-end">
                 <button
                   type="submit"
-                  class="btn btn-primary"
+                  class="btn btn-warning"
                   v-if="!isUploading"
                 >
-                  Upload Book
+                  Update Book
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-primary"
+                  class="btn btn-warning"
                   disabled
                   v-if="isUploading"
                 >
@@ -97,7 +102,7 @@
                     >
                       <span class="visually-hidden">Loading...</span>
                     </div>
-                    <div>Uploading...</div>
+                    <div>Updating...</div>
                   </div>
                 </button>
               </div>
@@ -109,21 +114,38 @@
   </div>
 </template>
 <script>
-import { db, timestamp } from "../../firebase/config";
-import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { db, timestamp } from "../../firebase/config";
+import { onMounted, ref } from "vue";
 
 export default {
-  setup() {
+  props: ["id"],
+  setup(props) {
     let router = useRouter();
     let isUploading = ref(false);
-
     let title = ref("");
     let author = ref("");
     let detail = ref("");
     let price = ref("");
     let tag = ref("");
     let tags = ref([]);
+
+    let book = ref({});
+
+    let load = async () => {
+      let res = await db.collection("books").doc(props.id).get();
+      book.value = { ...res.data(), id: res.id };
+
+      title.value = book.value.title;
+      author.value = book.value.author;
+      price.value = book.value.price;
+      detail.value = book.value.detail;
+      tags.value = book.value.tags;
+    };
+
+    onMounted(() => {
+      load();
+    });
 
     let addTags = (e) => {
       if (!tags.value.includes(tag.value)) {
@@ -142,25 +164,23 @@ export default {
       });
     };
 
-    let upload = async () => {
-      let newBookData = {
-        title: title.value,
-        author: author.value,
-        detail: detail.value,
-        price: price.value,
-        tags: tags.value,
-        created_at: timestamp(),
-        updated_at: null,
-      };
+    let goBack = () => router.go(-1);
 
+    let update = async () => {
       isUploading.value = true;
-
-      await db
-        .collection("books")
-        .add(newBookData)
-        .then((_) => {
+      db.collection("books")
+        .doc(props.id)
+        .update({
+          title: title.value,
+          author: author.value,
+          price: price.value,
+          detail: detail.value,
+          tags: tags.value,
+          updated_at: timestamp(),
+        })
+        .then(() => {
+          router.push({ name: "bookDetail", params: { id: props.id } });
           isUploading.value = false;
-          router.push({ name: "home" });
         });
     };
 
@@ -172,9 +192,11 @@ export default {
       tag,
       tags,
       isUploading,
+      book,
+      update,
+      goBack,
       addTags,
       removeTag,
-      upload,
     };
   },
 };

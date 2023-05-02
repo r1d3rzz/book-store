@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import BookDetail from "../views/BookDetail.vue";
 import BookCreate from "../views/BookCreate.vue";
 import TagView from "../views/TagView.vue";
+import EditView from "../views/EditView.vue";
 
 const routes = [
   {
@@ -20,6 +21,12 @@ const routes = [
     path: "/books/tags/:tag",
     name: "tagView",
     component: TagView,
+    props: true,
+  },
+  {
+    path: "/books/edit/:id",
+    name: "editView",
+    component: EditView,
     props: true,
   },
   {
