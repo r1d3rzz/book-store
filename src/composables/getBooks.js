@@ -6,7 +6,10 @@ const getBooks = () => {
   let error = ref("");
   let load = async () => {
     try {
-      let res = await db.collection("books").get();
+      let res = await db
+        .collection("books")
+        .orderBy("created_at", "desc")
+        .get();
       books.value = res.docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });

@@ -109,7 +109,7 @@
   </div>
 </template>
 <script>
-import { db } from "../../firebase/config";
+import { db, timestamp } from "../../firebase/config";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -149,6 +149,7 @@ export default {
         detail: detail.value,
         price: price.value,
         tags: tags.value,
+        created_at: timestamp(),
       };
 
       isUploading.value = true;
