@@ -4,10 +4,48 @@
       <div class="alert alert-warning fs-3">{{ error }}</div>
     </div>
     <div class="row" v-if="book">
+      <div v-if="isShow">
+        <ConfirmVIew @close="closeModel">
+          <div class="fs-4">Are You Sure to Delete it?</div>
+          <div class="mt-3">
+            <button
+              class="btn btn-danger mx-1"
+              @click="deleteBook(book.id)"
+              v-if="!isDelete"
+            >
+              Yes
+            </button>
+            <button class="btn btn-danger mx-1" disabled v-if="isDelete">
+              <div class="d-flex align-items-center">
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="ms-1">Deleteting...</div>
+              </div>
+            </button>
+            <button
+              class="btn btn-primary mx-1"
+              @click="isShow = false"
+              :disabled="isDelete"
+            >
+              Cancel
+            </button>
+          </div>
+        </ConfirmVIew>
+      </div>
       <div class="col-md-9 mx-auto mt-5 text-start">
         <div class="card">
-          <div class="card-header">
-            <h3>{{ book.title }}</h3>
+          <div
+            class="card-header d-flex justify-content-between align-items-center"
+          >
+            <div>
+              <h3>{{ book.title }}</h3>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-danger" @click="isShow = true">
+                delete
+              </button>
+            </div>
           </div>
           <div class="card-body">
             <h4>Author - {{ book.author }}</h4>
@@ -42,19 +80,47 @@
   </div>
 </template>
 <script>
+import { ref } from "vue";
+import ConfirmVIew from "../components/ConfirmVIew";
 import LoadingLogos from "../components/LoadingLogos";
 import getBook from "@/composables/getBook";
 import { useRouter } from "vue-router";
+import { db } from "../../firebase/config";
 
 export default {
-  components: { LoadingLogos },
+  components: {
+    ConfirmVIew,
+    LoadingLogos,
+  },
   props: ["id"],
   setup(props) {
     let router = useRouter();
+    let isShow = ref(false);
+    let isDelete = ref(false);
     let { book, error, load } = getBook(props.id);
     load();
     let goBack = () => router.go(-1);
-    return { book, error, goBack };
+
+    let closeModel = () => {
+      if (isDelete.value == false) {
+        isShow.value = false;
+      }
+    };
+
+    let deleteBook = async (id) => {
+      isDelete.value = true;
+      await db
+        .collection("books")
+        .doc(id)
+        .delete()
+        .then(() => {
+          isShow.value = false;
+          isDelete.value = false;
+          router.push({ name: "home" });
+        });
+    };
+
+    return { book, error, isShow, isDelete, goBack, deleteBook, closeModel };
   },
 };
 </script>
