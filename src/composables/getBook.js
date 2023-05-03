@@ -1,4 +1,4 @@
-import { db } from "../../firebase/config";
+import { db } from "../firebase/config";
 import { ref } from "vue";
 
 let getBook = (id) => {

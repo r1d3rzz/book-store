@@ -46,7 +46,9 @@
       <div v-if="!isLogin">
         <SignIn @openLoginBox="isLogin = true" @closeModel="isShow = false" />
       </div>
-      <div v-if="isLogin"><LogIn @openSignInBox="isLogin = false" /></div>
+      <div v-if="isLogin">
+        <LogIn @openSignInBox="isLogin = false" @closeModel="isShow = false" />
+      </div>
     </div>
   </div>
 </template>

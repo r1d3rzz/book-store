@@ -90,7 +90,7 @@ import ConfirmVIew from "../components/ConfirmVIew";
 import LoadingLogos from "../components/LoadingLogos";
 import getBook from "@/composables/getBook";
 import { useRouter } from "vue-router";
-import { db } from "../../firebase/config";
+import { db } from "../firebase/config";
 
 export default {
   components: {

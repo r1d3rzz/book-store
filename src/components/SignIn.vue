@@ -82,7 +82,7 @@
 </template>
 <script>
 import { ref } from "vue";
-import { auth } from "../../firebase/config";
+import { auth } from "../firebase/config";
 import { useRouter } from "vue-router";
 
 export default {
@@ -103,18 +103,23 @@ export default {
 
     let signUp = async () => {
       isLoading.value = true;
-      try {
-        let res = await auth.createUserWithEmailAndPassword(
-          email.value,
-          password.value
-        );
-        res.user.updateProfile({ displayName: name.value });
-        emit("closeModel");
+      if (password.value === c_password.value) {
+        try {
+          let res = await auth.createUserWithEmailAndPassword(
+            email.value,
+            password.value
+          );
+          res.user.updateProfile({ displayName: name.value });
+          emit("closeModel");
+          isLoading.value = false;
+          router.push({ name: "home" });
+        } catch (err) {
+          isLoading.value = false;
+          error.value = err.message;
+        }
+      } else {
         isLoading.value = false;
-        router.push({ name: "home" });
-      } catch (err) {
-        isLoading.value = false;
-        error.value = err.message;
+        p_error.value = "password and confirm password does not match!";
       }
     };
 

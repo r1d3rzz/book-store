@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { db } from "../../firebase/config";
+import { db } from "../firebase/config";
 
 const getBooks = () => {
   let books = ref([]);

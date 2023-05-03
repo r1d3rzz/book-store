@@ -115,7 +115,7 @@
 </template>
 <script>
 import { useRouter } from "vue-router";
-import { db, timestamp } from "../../firebase/config";
+import { db, timestamp } from "../firebase/config";
 import { onMounted, ref } from "vue";
 
 export default {

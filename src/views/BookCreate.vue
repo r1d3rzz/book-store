@@ -109,7 +109,7 @@
   </div>
 </template>
 <script>
-import { db, timestamp } from "../../firebase/config";
+import { db, timestamp } from "../firebase/config";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
