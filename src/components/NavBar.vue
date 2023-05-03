@@ -43,7 +43,9 @@
 
   <div class="backdrop" v-if="isShow" @click.self="isShow = false">
     <div class="mt-5 model">
-      <div v-if="!isLogin"><SignIn @openLoginBox="isLogin = true" /></div>
+      <div v-if="!isLogin">
+        <SignIn @openLoginBox="isLogin = true" @closeModel="isShow = false" />
+      </div>
       <div v-if="isLogin"><LogIn @openSignInBox="isLogin = false" /></div>
     </div>
   </div>
