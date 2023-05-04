@@ -78,7 +78,7 @@
   <div class="backdrop" v-if="isShow" @click.self="isShow = false">
     <div class="mt-5 model">
       <div v-if="!isLogin">
-        <SignIn @openLoginBox="isLogin = true" @loginAgain="isLogin = true" />
+        <SignUp @openLoginBox="isLogin = true" @loginAgain="isLogin = true" />
       </div>
       <div v-if="isLogin">
         <LogIn @openSignInBox="isLogin = false" @closeModel="isShow = false" />
@@ -89,12 +89,12 @@
 <script>
 import getUser from "../composables/getUser";
 import LogIn from "./LogIn";
-import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 import { ref } from "vue";
 export default {
   components: {
     LogIn,
-    SignIn,
+    SignUp,
   },
   setup() {
     let isShow = ref(false);

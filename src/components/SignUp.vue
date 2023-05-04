@@ -23,7 +23,7 @@
         </div>
 
         <div class="form-group mb-3">
-          <label for="email">Eamil</label>
+          <label for="email">Email</label>
           <input
             type="email"
             id="email"

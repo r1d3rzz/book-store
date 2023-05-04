@@ -6,7 +6,7 @@
       >
         <div>
           <div>
-            Hello <span class="fw-bold">{{ user.displayName }}</span>
+            <span class="fw-bold">{{ user.displayName }}</span>
           </div>
           <div class="text-muted">logged as {{ user.email }}</div>
         </div>
@@ -15,21 +15,21 @@
         </button>
       </div>
       <div class="card-body">
-        <div class="chatTextContainer">
-          <div v-for="text in 20" :key="text">
-            <div class="mb-3">
-              <span class="chatText">this is testing</span>
-            </div>
-          </div>
-        </div>
+        <div class="alert alert-warning" v-if="error">{{ error }}</div>
+        <ChatDisplay />
         <div>
           <div class="input-group">
             <input
               type="text"
               placeholder="Type here..."
               class="form-control group-item"
+              v-model="message"
             />
-            <button class="btn btn-sm btn-primary">
+            <button
+              class="btn btn-sm btn-primary"
+              @click="sendMessage"
+              :disabled="isSend"
+            >
               <i class="fas fa-paper-plane fa-lg" style="padding: 0 5px"></i>
             </button>
           </div>
@@ -39,17 +39,46 @@
   </div>
 </template>
 <script>
+import ChatDisplay from "./ChatDisplay";
+import useCollection from "@/composables/useCollection";
+import { timestamp } from "@/firebase/config";
+import { ref } from "vue";
+
 export default {
+  components: { ChatDisplay },
   emits: ["closeChatRoomModel"],
   props: ["user"],
   setup(props, { emit }) {
     let user = props.user;
+    let message = ref("");
+    let isSend = ref(false);
+    let { error, addDocs } = useCollection("messages");
 
     let closeChatRoom = () => {
       emit("closeChatRoomModel");
     };
 
-    return { closeChatRoom, user };
+    let sendMessage = async () => {
+      if (message.value) {
+        isSend.value = true;
+        let chat = {
+          message: message.value,
+          name: user.displayName,
+          created_at: timestamp(),
+        };
+        message.value = "";
+        await addDocs(chat).then(() => {
+          isSend.value = false;
+        });
+      } else {
+        error.value = "Enter a Message";
+        setTimeout(() => {
+          error.value = null;
+        }, 2000);
+      }
+    };
+
+    return { closeChatRoom, user, message, sendMessage, error, isSend };
   },
 };
 </script>
@@ -70,17 +99,5 @@ export default {
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.568);
-}
-.chatText {
-  background-color: lightgrey;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 15px;
-  border-bottom-left-radius: 0;
-}
-
-.chatTextContainer {
-  height: 400px;
-  overflow: auto;
 }
 </style>
