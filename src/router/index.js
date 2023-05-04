@@ -5,6 +5,7 @@ import BookCreate from "../views/BookCreate.vue";
 import TagView from "../views/TagView.vue";
 import EditView from "../views/EditView.vue";
 import UserProfile from "../views/user/UserProfile.vue";
+import { auth } from "@/firebase/config";
 
 const routes = [
   {
@@ -34,12 +35,27 @@ const routes = [
     path: "/books/create",
     name: "bookCreate",
     component: BookCreate,
-    props: true,
+    beforeEnter: (to, from, next) => {
+      let user = auth.currentUser;
+      if (user) {
+        next();
+      } else {
+        next({ name: "home" });
+      }
+    },
   },
   {
     path: "/user/profile",
     name: "userProfile",
     component: UserProfile,
+    beforeEnter: (to, from, next) => {
+      let user = auth.currentUser;
+      if (user) {
+        next();
+      } else {
+        next({ name: "home" });
+      }
+    },
   },
   {
     path: "/:catchAll(.*)",
