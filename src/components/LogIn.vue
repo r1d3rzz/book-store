@@ -81,8 +81,7 @@ export default {
       if (res) {
         isLoading.value = false;
         emit("closeModel");
-        router.push({ name: "home" });
-        console.log(res.user.displayName);
+        router.push({ name: "userProfile" });
       } else {
         isLoading.value = false;
       }

@@ -86,7 +86,7 @@ import { auth } from "../firebase/config";
 import { useRouter } from "vue-router";
 
 export default {
-  emits: ["openLoginBox", "closeModel"],
+  emits: ["openLoginBox", "loginAgain"],
   setup(props, { emit }) {
     let login = () => {
       emit("openLoginBox");
@@ -109,10 +109,13 @@ export default {
             email.value,
             password.value
           );
-          res.user.updateProfile({ displayName: name.value });
-          emit("closeModel");
-          isLoading.value = false;
-          router.push({ name: "home" });
+          if (res) {
+            res.user.updateProfile({ displayName: name.value });
+            emit("loginAgain");
+            isLoading.value = false;
+            router.push({ name: "home" });
+            auth.signOut();
+          }
         } catch (err) {
           isLoading.value = false;
           error.value = err.message;

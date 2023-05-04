@@ -4,6 +4,7 @@ import BookDetail from "../views/BookDetail.vue";
 import BookCreate from "../views/BookCreate.vue";
 import TagView from "../views/TagView.vue";
 import EditView from "../views/EditView.vue";
+import UserProfile from "../views/user/UserProfile.vue";
 
 const routes = [
   {
@@ -34,6 +35,11 @@ const routes = [
     name: "bookCreate",
     component: BookCreate,
     props: true,
+  },
+  {
+    path: "/user/profile",
+    name: "userProfile",
+    component: UserProfile,
   },
   {
     path: "/:catchAll(.*)",
