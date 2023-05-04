@@ -9,6 +9,9 @@ let loginUser = async (email, password) => {
     return res;
   } catch (err) {
     error.value = err.message;
+    setTimeout(() => {
+      error.value = null;
+    }, 3000);
   }
 };
 

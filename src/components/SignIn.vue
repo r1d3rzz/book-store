@@ -119,6 +119,9 @@ export default {
         } catch (err) {
           isLoading.value = false;
           error.value = err.message;
+          setTimeout(() => {
+            error.value = null;
+          }, 3000);
         }
       } else {
         isLoading.value = false;
