@@ -119,10 +119,17 @@
           </div>
         </div>
       </div>
+
+      <div class="row mt-3">
+        <div class="col-md mx-auto">
+          <UserBooks :user="user" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import UserBooks from "../../components/UserBooks";
 import ConfirmVIew from "../../components/ConfirmVIew";
 import getUser from "@/composables/getUser";
 import { auth } from "@/firebase/config";
@@ -130,7 +137,10 @@ import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
-  components: { ConfirmVIew },
+  components: {
+    UserBooks,
+    ConfirmVIew,
+  },
   setup() {
     let router = useRouter();
     let { user } = getUser();
