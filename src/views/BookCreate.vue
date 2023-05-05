@@ -109,14 +109,17 @@
   </div>
 </template>
 <script>
-import { db, timestamp } from "../firebase/config";
+import useCollection from "@/composables/useCollection";
+import { auth, timestamp } from "../firebase/config";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import getUser from "@/composables/getUser";
 
 export default {
   setup() {
     let router = useRouter();
     let isUploading = ref(false);
+    let { user } = getUser();
 
     let title = ref("");
     let author = ref("");
@@ -124,6 +127,8 @@ export default {
     let price = ref("");
     let tag = ref("");
     let tags = ref([]);
+
+    let { error, addDocs } = useCollection("books");
 
     let addTags = (e) => {
       if (!tags.value.includes(tag.value)) {
@@ -143,25 +148,28 @@ export default {
     };
 
     let upload = async () => {
-      let newBookData = {
-        title: title.value,
-        author: author.value,
-        detail: detail.value,
-        price: price.value,
-        tags: tags.value,
-        created_at: timestamp(),
-        updated_at: null,
-      };
+      if (user.value) {
+        let newBookData = {
+          title: title.value,
+          author: author.value,
+          detail: detail.value,
+          price: price.value,
+          tags: tags.value,
+          created_at: timestamp(),
+          updated_at: null,
+          owner: {
+            name: user.value.displayName,
+            email: user.value.email,
+          },
+        };
 
-      isUploading.value = true;
+        isUploading.value = true;
 
-      await db
-        .collection("books")
-        .add(newBookData)
-        .then((_) => {
+        await addDocs(newBookData).then(() => {
           isUploading.value = false;
           router.push({ name: "home" });
         });
+      }
     };
 
     return {
@@ -171,6 +179,7 @@ export default {
       price,
       tag,
       tags,
+      error,
       isUploading,
       addTags,
       removeTag,

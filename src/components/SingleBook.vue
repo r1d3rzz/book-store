@@ -1,9 +1,13 @@
 <template>
   <div class="card-header">
-    <h3>{{ book.title }}</h3>
+    <div>
+      <div class="fw-bold">{{ book.owner.name }}</div>
+      <div class="text-muted">{{ book.created_at }}</div>
+    </div>
   </div>
   <div class="card-body">
-    <h4>Author - {{ book.author }}</h4>
+    <h4 class="text-center">{{ book.title }}</h4>
+    <h6>Author - {{ book.author }}</h6>
     <div>
       Tags -
       <span

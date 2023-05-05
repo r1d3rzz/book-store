@@ -39,7 +39,10 @@
             class="card-header d-flex justify-content-between align-items-center"
           >
             <div>
-              <h3>{{ book.title }}</h3>
+              <div class="fw-bold">{{ book.owner.name }}</div>
+              <div class="text-muted">
+                {{ changeTimeFormat(book.created_at.toDate()) }}
+              </div>
             </div>
             <div>
               <button class="btn btn-sm btn-danger me-1" @click="isShow = true">
@@ -53,7 +56,8 @@
             </div>
           </div>
           <div class="card-body">
-            <h4>Author - {{ book.author }}</h4>
+            <h3 class="text-center">{{ book.title }}</h3>
+            <h5>Author - {{ book.author }}</h5>
             <div>
               Tags -
               <span
@@ -91,6 +95,7 @@ import LoadingLogos from "../components/LoadingLogos";
 import getBook from "@/composables/getBook";
 import { useRouter } from "vue-router";
 import { db } from "../firebase/config";
+import { formatDistanceToNow } from "date-fns";
 
 export default {
   components: {
@@ -125,7 +130,20 @@ export default {
         });
     };
 
-    return { book, error, isShow, isDelete, goBack, deleteBook, closeModel };
+    let changeTimeFormat = (dateFormat) => {
+      return formatDistanceToNow(dateFormat);
+    };
+
+    return {
+      book,
+      error,
+      isShow,
+      isDelete,
+      goBack,
+      deleteBook,
+      closeModel,
+      changeTimeFormat,
+    };
   },
 };
 </script>

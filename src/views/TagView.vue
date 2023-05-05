@@ -9,8 +9,12 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <LoadingLogos />
+  </div>
 </template>
 <script>
+import LoadingLogos from "../components/LoadingLogos";
 import TagsCloud from "../components/TagsCloud";
 import BookLists from "../components/BookLists";
 import getBooks from "@/composables/getBooks";
@@ -18,6 +22,7 @@ import { computed } from "vue";
 export default {
   props: ["tag"],
   components: {
+    LoadingLogos,
     TagsCloud,
     BookLists,
   },

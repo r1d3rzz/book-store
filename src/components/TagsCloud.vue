@@ -1,5 +1,5 @@
 <template>
-  <div class="card text-start">
+  <div class="card text-start tagCloudContainer">
     <div class="card-header fs-3 text-center">Tags</div>
     <div class="card-body d-flex flex-wrap">
       <div class="fs-6 me-1 mb-1" v-for="tag in uniqueTags" :key="tag">
@@ -43,5 +43,9 @@ export default {
 
 .router-link-exact-active {
   background-color: red;
+}
+
+.tagCloudContainer {
+  position: fixed;
 }
 </style>
