@@ -44,15 +44,22 @@
                 {{ changeTimeFormat(book.created_at.toDate()) }}
               </div>
             </div>
-            <div>
-              <button class="btn btn-sm btn-danger me-1" @click="isShow = true">
-                delete
-              </button>
-              <router-link :to="{ name: 'editView', params: { id: book.id } }">
-                <button class="btn btn-sm btn-warning" @click="isShow = true">
-                  edit
+            <div v-if="user">
+              <div v-if="user.email === book.owner.email">
+                <button
+                  class="btn btn-sm btn-danger me-1"
+                  @click="isShow = true"
+                >
+                  delete
                 </button>
-              </router-link>
+                <router-link
+                  :to="{ name: 'editView', params: { id: book.id } }"
+                >
+                  <button class="btn btn-sm btn-warning" @click="isShow = true">
+                    edit
+                  </button>
+                </router-link>
+              </div>
             </div>
           </div>
           <div class="card-body">
@@ -76,7 +83,11 @@
             <p>{{ book.detail }}</p>
           </div>
           <div class="card-footer">
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                Contact <i class="fas fa-envelope"></i> :
+                <span class="text-muted">{{ book.owner.email }}</span>
+              </div>
               <button @click="goBack" class="btn btn-dark">Back</button>
             </div>
           </div>
@@ -96,6 +107,7 @@ import getBook from "@/composables/getBook";
 import { useRouter } from "vue-router";
 import { db } from "../firebase/config";
 import { formatDistanceToNow } from "date-fns";
+import getUser from "@/composables/getUser";
 
 export default {
   components: {
@@ -108,6 +120,7 @@ export default {
     let isShow = ref(false);
     let isDelete = ref(false);
     let { book, error, load } = getBook(props.id);
+    let { user } = getUser();
     load();
     let goBack = () => router.push({ name: "home" });
 
@@ -139,6 +152,7 @@ export default {
       error,
       isShow,
       isDelete,
+      user,
       goBack,
       deleteBook,
       closeModel,

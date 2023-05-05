@@ -1,8 +1,15 @@
 <template>
-  <div class="card-header">
+  <div class="card-header d-flex justify-content-between align-items-center">
     <div>
       <div class="fw-bold">{{ book.owner.name }}</div>
       <div class="text-muted">{{ book.created_at }}</div>
+    </div>
+    <div v-if="user">
+      <div v-if="user.email === book.owner.email">
+        <router-link :to="{ name: 'bookDetail', params: { id: book.id } }">
+          <button class="btn btn-sm btn-primary">Detail</button>
+        </router-link>
+      </div>
     </div>
   </div>
   <div class="card-body">
@@ -35,15 +42,17 @@
   </div>
 </template>
 <script>
+import getUser from "@/composables/getUser";
 import { computed } from "vue";
 
 export default {
   props: ["book"],
   setup(props) {
+    let { user } = getUser();
     let bookIntro = computed(() => {
       return props.book.detail.substring(0, 200);
     });
-    return { bookIntro };
+    return { bookIntro, user };
   },
 };
 </script>
