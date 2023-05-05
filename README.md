@@ -1,4 +1,18 @@
-# jobs_project
+
+# books_store
+
+## Project Firebase Deploy Link
+```
+https://vue-projects-9c7a2.web.app/
+```
+
+## Features
+
+- Users can Sign Up/Destroy their account 
+- Login/out Authentication Feature
+- Users can post their books on Website 
+- And Update and Delete their posts 
+- Live Chatting Feature
 
 ## Project setup
 ```
